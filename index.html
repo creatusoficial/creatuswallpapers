@@ -34,20 +34,29 @@
 
         .preview-card {
             width: 100%;
-            max-width: 360px;
+            max-width: 340px;
             aspect-ratio: 9 / 16;
-            border-radius: 20px;
+            border-radius: 24px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
             margin-bottom: 20px;
-            transition: background 0.3s ease;
             position: relative;
             overflow: hidden;
             border: 4px solid white;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #emojiDisplay {
+            font-size: 5rem;
+            transition: transform 0.2s ease;
+            user-select: none;
         }
 
         .controls {
             width: 100%;
-            max-width: 360px;
+            max-width: 340px;
             background: white;
             padding: 20px;
             border-radius: 20px;
@@ -55,34 +64,33 @@
         }
 
         .section-title {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin: 15px 0 8px 0;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             color: #6d28d9;
         }
 
+        .section-title:first-child {
+            margin-top: 0;
+        }
+
+        /* Contenedor de Paletas */
         .palette-container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
-            margin-bottom: 20px;
         }
 
         .palette-btn {
             display: flex;
-            height: 45px;
+            height: 40px;
             border-radius: 10px;
             border: 2px solid transparent;
             cursor: pointer;
             overflow: hidden;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: transform 0.1s ease;
-        }
-
-        .palette-btn:active {
-            transform: scale(0.95);
         }
 
         .palette-btn.active {
@@ -93,6 +101,34 @@
         .color-block {
             flex: 1;
             height: 100%;
+        }
+
+        /* Contenedor de Emojis */
+        .emoji-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .emoji-btn {
+            background: #f3f4f6;
+            border: none;
+            font-size: 1.6rem;
+            padding: 8px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .emoji-btn:active {
+            transform: scale(0.85);
+            background: #e5e7eb;
+        }
+
+        .emoji-btn.active {
+            background: #ddd6fe;
+            box-shadow: 0 0 0 2px #a78bfa;
         }
 
         .btn-download {
@@ -108,11 +144,6 @@
             cursor: pointer;
             text-align: center;
             box-shadow: 0 4px 12px rgba(109, 40, 217, 0.2);
-            transition: background 0.2s;
-        }
-
-        .btn-download:active {
-            transform: scale(0.98);
         }
     </style>
 </head>
@@ -120,31 +151,43 @@
 
     <h1> Creador de Wallpapers</h1>
 
-    <div class="preview-card" id="wallpaperPreview"></div>
+    <div class="preview-card" id="wallpaperPreview">
+        <div id="emojiDisplay"></div>
+    </div>
 
     <div class="controls">
-        <p class="section-title"> Seleccioná tu Paleta de Colores</p>
-        
+        <p class="section-title"> 1. Paleta de Colores</p>
         <div class="palette-container">
             <button class="palette-btn active" onclick="changeGradient('#f5f3ff', '#fbcfe8', this)">
                 <div class="color-block" style="background-color: #f5f3ff;"></div>
                 <div class="color-block" style="background-color: #fbcfe8;"></div>
             </button>
-
             <button class="palette-btn" onclick="changeGradient('#ffedd5', '#fecdd3', this)">
                 <div class="color-block" style="background-color: #ffedd5;"></div>
                 <div class="color-block" style="background-color: #fecdd3;"></div>
             </button>
-
             <button class="palette-btn" onclick="changeGradient('#e0e7ff', '#c7d2fe', this)">
                 <div class="color-block" style="background-color: #e0e7ff;"></div>
                 <div class="color-block" style="background-color: #c7d2fe;"></div>
             </button>
-
             <button class="palette-btn" onclick="changeGradient('#ecfccb', '#ccfbf1', this)">
                 <div class="color-block" style="background-color: #ecfccb;"></div>
                 <div class="color-block" style="background-color: #ccfbf1;"></div>
             </button>
+        </div>
+
+        <p class="section-title"> 2. Elegí un Centro</p>
+        <div class="emoji-container">
+            <button class="emoji-btn active" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
         </div>
 
         <button class="btn-download" onclick="downloadNotice()">Descargar Fondo</button>
@@ -152,21 +195,25 @@
 
     <script>
         const preview = document.getElementById('wallpaperPreview');
+        const emojiDisplay = document.getElementById('emojiDisplay');
         
-        // Configuración inicial
+        // Inicialización
         preview.style.background = "linear-gradient(135deg, #f5f3ff 0%, #fbcfe8 100%)";
 
         function changeGradient(color1, color2, element) {
-            // Cambiar fondo
             preview.style.background = `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)`;
-            
-            // Cambiar botón activo
             document.querySelectorAll('.palette-btn').forEach(btn => btn.classList.remove('active'));
             element.classList.add('active');
         }
 
+        function changeEmoji(emoji, element) {
+            emojiDisplay.innerText = emoji;
+            document.querySelectorAll('.emoji-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+        }
+
         function downloadNotice() {
-            alert('¡Tu fondo personalizado está listo! Mantené presionada la pantalla de vista previa para guardarla como imagen (Próximamente descarga automática).');
+            alert('¡Fondo listo! Para guardarlo en tu celu, mantené apretada la imagen del fondo de arriba y dale a "Descargar imagen".');
         }
     </script>
 
