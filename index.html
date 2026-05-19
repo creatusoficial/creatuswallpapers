@@ -9,7 +9,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -42,7 +42,6 @@
             position: relative;
             overflow: hidden;
             border: 4px solid white;
-            transition: background 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -50,7 +49,6 @@
 
         #emojiDisplay {
             font-size: 5.5rem;
-            transition: transform 0.2s ease;
             user-select: none;
         }
 
@@ -61,8 +59,6 @@
             padding: 20px;
             border-radius: 20px;
             box-shadow: 0 4px 15px rgba(124, 58, 237, 0.08);
-            max-height: 45vh;
-            overflow-y: auto;
         }
 
         .section-title {
@@ -74,15 +70,11 @@
             color: #6d28d9;
         }
 
-        .section-title:first-child {
-            margin-top: 0;
-        }
-
-        /* Contenedor de Paletas */
         .palette-container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
+            margin-bottom: 15px;
         }
 
         .palette-btn {
@@ -92,7 +84,6 @@
             border: 2px solid transparent;
             cursor: pointer;
             overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
         .palette-btn.active {
@@ -105,7 +96,6 @@
             height: 100%;
         }
 
-        /* Contenedor de Emojis */
         .emoji-container {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -117,18 +107,12 @@
             background: #f3f4f6;
             border: none;
             font-size: 1.6rem;
-            padding: 8px 0;
+            height: 45px;
             border-radius: 10px;
             cursor: pointer;
-            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .emoji-btn:active {
-            transform: scale(0.85);
-            background: #e5e7eb;
         }
 
         .emoji-btn.active {
@@ -146,24 +130,19 @@
             border-radius: 12px;
             font-size: 1rem;
             font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(109, 40, 217, 0.2);
-            position: sticky;
-            bottom: 0;
         }
     </style>
 </head>
 <body>
 
-    <h1> Creador de Wallpapers</h1>
+    <h1>✨ Creador de Wallpapers</h1>
 
     <div class="preview-card" id="wallpaperPreview">
-        <div id="emojiDisplay"></div>
+        <div id="emojiDisplay">&#x2764;&#xFE0F;</div>
     </div>
 
     <div class="controls">
-        <p class="section-title"> 1. Paleta de Colores</p>
+        <p class="section-title">🎨 1. Paleta de Colores</p>
         <div class="palette-container">
             <button class="palette-btn active" onclick="changeGradient('#f5f3ff', '#fbcfe8', this)">
                 <div class="color-block" style="background-color: #f5f3ff;"></div>
@@ -183,45 +162,18 @@
             </button>
         </div>
 
-        <p class="section-title"> 2. Elegi un Centro</p>
+        <p class="section-title">🌸 2. Elegi un Centro</p>
         <div class="emoji-container">
-            <button class="emoji-btn active" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
-            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn active" onclick="changeEmoji('&#x2764;&#xFE0F;', this)">&#x2764;&#xFE0F;</button>
+            <button class="emoji-btn" onclick="changeEmoji('&#x1F499;', this)">&#x1F499;</button>
+            <button class="emoji-btn" onclick="changeEmoji('&#x1F49C;', this)">&#x1F49C;</button>
+            <button class="emoji-btn" onclick="changeEmoji('&#x2728;', this)">&#x2728;</button>
+            <button class="emoji-btn" onclick="changeEmoji('&#x1F525;', this)">&#x1F525;</button>
+            <button class="emoji-btn" onclick="changeEmoji('&#x1F33B;', this)">&#x1F33B;</button>
+            <button class="emoji-btn" onclick="changeEmoji('&#x1F352;', this)">&#x1F352;</button>
+            <button class="emoji-btn" onclick="changeEmoji('&#x1F349;', this)">&#x1F349;</button>
+            <button class="emoji-btn" onclick="changeEmoji('&#x1F9C9;', this)">&#x1F9C9;</button>
+            <button class="emoji-btn" onclick="changeEmoji('&#x1F431;', this)">&#x1F431;</button>
         </div>
 
         <button class="btn-download" onclick="downloadNotice()">Descargar Fondo</button>
@@ -239,14 +191,14 @@
             element.classList.add('active');
         }
 
-        function changeEmoji(emoji, element) {
-            emojiDisplay.innerText = emoji;
+        function changeEmoji(emojiHex, element) {
+            emojiDisplay.innerHTML = emojiHex;
             document.querySelectorAll('.emoji-btn').forEach(btn => btn.classList.remove('active'));
             element.classList.add('active');
         }
 
         function downloadNotice() {
-            alert('�Fondo listo! Para guardarlo en tu celu, mantene apretada la imagen de arriba y dale a "Descargar imagen".');
+            alert('¡Fondo listo! Mantené apretada la imagen de arriba para guardarla.');
         }
     </script>
 
