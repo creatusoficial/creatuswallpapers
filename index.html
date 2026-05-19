@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creador de Wallpapers Pro - Creatus</title>
+    <title>Creador de Fondos HD - Creatus</title>
     <style>
         * {
             margin: 0;
@@ -14,8 +14,7 @@
         }
 
         body {
-            background-color: #f5f3ff;
-            color: #4c1d95;
+            background-color: #f3f4f6;
             padding: 10px;
             display: flex;
             flex-direction: column;
@@ -23,110 +22,171 @@
             min-height: 100vh;
         }
 
-        h1 {
-            font-size: 1.4rem;
-            margin: 5px 0 10px 0;
-            text-align: center;
-            background: linear-gradient(45deg, #6d28d9, #4f46e5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .main-container {
+            width: 100%;
+            max-width: 360px;
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* Lienzo interactivo manteniendo el formato de CodePen */
-        .canvas-container {
+        .title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+
+        /* Vista previa manteniendo el estilo exacto de tu CodePen */
+        .preview-box {
             width: 100%;
-            max-width: 320px;
             aspect-ratio: 9 / 16;
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border-radius: 15px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
             margin-bottom: 15px;
             position: relative;
             overflow: hidden;
-            border: 3px solid white;
+            border: 1px solid #e5e7eb;
         }
 
         #wallpaperCanvas {
             width: 100%;
             height: 100%;
             display: block;
-            cursor: crosshair;
         }
 
-        .controls {
+        /* Pestañas de Navegación */
+        .tabs {
+            display: flex;
             width: 100%;
-            max-width: 320px;
-            background: white;
-            padding: 15px;
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.08);
-            max-height: 48vh;
-            overflow-y: auto;
+            background: #f3f4f6;
+            padding: 4px;
+            border-radius: 10px;
+            margin-bottom: 15px;
         }
 
-        .section-title {
+        .tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 8px 0;
             font-size: 0.85rem;
             font-weight: 600;
-            margin: 12px 0 6px 0;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #6d28d9;
-        }
-
-        .section-title:first-child {
-            margin-top: 0;
-        }
-
-        /* Estilo de Paletas de la versión 1 */
-        .palette-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-        }
-
-        .palette-btn {
-            display: flex;
-            height: 35px;
-            border-radius: 8px;
-            border: 2px solid transparent;
+            color: #4b5563;
             cursor: pointer;
-            overflow: hidden;
+            border-radius: 8px;
+            text-align: center;
         }
 
-        .palette-btn.active {
-            border-color: #4c1d95;
-            box-shadow: 0 0 0 2px #c084fc;
+        .tab-btn.active {
+            background: white;
+            color: #000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
-        .color-block {
-            flex: 1;
-            height: 100%;
+        .tab-content {
+            display: none;
+            width: 100%;
         }
 
-        /* El regulador de tamaño */
-        .tool-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            background: #f9f8ff;
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Formularios y botones estilo CodePen */
+        .label-text {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .file-upload-btn {
+            display: block;
+            width: 100%;
+            background: #fff;
+            border: 1px solid #d1d5db;
             padding: 10px;
-            border-radius: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+
+        .color-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .color-input-container {
+            text-align: center;
+        }
+
+        .color-picker {
+            width: 100%;
+            height: 35px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            padding: 0;
+            background: none;
+        }
+
+        /* Botones de Dirección */
+        .direction-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            margin-bottom: 12px;
+        }
+
+        .dir-btn {
+            background: white;
+            border: 1px solid #d1d5db;
+            padding: 6px 0;
+            font-size: 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .dir-btn.active {
+            background: #9333ea;
+            color: white;
+            border-color: #9333ea;
+        }
+
+        /* Círculos de colores pasteles */
+        .pastel-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
             margin-bottom: 10px;
         }
 
-        .row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            justify-content: space-between;
+        .pastel-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px solid #e5e7eb;
+            cursor: pointer;
         }
 
+        /* Sección Emojis con control de tamaño */
         .slider {
             width: 100%;
-            accent-color: #6d28d9;
+            accent-color: #9333ea;
+            margin-bottom: 12px;
         }
 
-        /* Contenedor Completo de Emojis de la versión 1 */
-        .emoji-container {
+        .emoji-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 6px;
@@ -135,7 +195,7 @@
         .emoji-btn {
             background: #f3f4f6;
             border: none;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             height: 40px;
             border-radius: 8px;
             cursor: pointer;
@@ -145,134 +205,145 @@
         }
 
         .emoji-btn.active {
-            background: #ddd6fe;
-            box-shadow: 0 0 0 2px #a78bfa;
+            background: #f3e8ff;
+            border: 1px solid #c084fc;
         }
 
+        /* Sección Texto */
         .input-text {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd6fe;
+            padding: 10px;
+            border: 1px solid #d1d5db;
             border-radius: 8px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
             outline: none;
         }
 
-        .color-picker {
-            border: none;
-            width: 40px;
-            height: 30px;
-            border-radius: 5px;
-            cursor: pointer;
-            background: none;
-        }
-
-        .btn-action {
-            background: #ef4444;
+        .btn-add-text {
+            width: 100%;
+            background: #9333ea;
             color: white;
             border: none;
-            padding: 8px;
+            padding: 10px;
             border-radius: 8px;
             font-size: 0.85rem;
-            cursor: pointer;
             font-weight: 600;
-            width: 100%;
-            margin-top: 5px;
+            cursor: pointer;
         }
 
+        /* Botón de Descargar Principal */
         .btn-download {
-            display: block;
             width: 100%;
-            background: linear-gradient(45deg, #6d28d9, #4f46e5);
+            background: #9333ea;
             color: white;
             border: none;
             padding: 12px;
             border-radius: 10px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
-            text-align: center;
-            margin-top: 10px;
+            margin-top: 15px;
+            box-shadow: 0 4px 6px rgba(147, 51, 234, 0.2);
         }
     </style>
 </head>
 <body>
 
-    <h1> Creador de Wallpapers Studio</h1>
+    <div class="main-container">
+        <div class="title">Creador de Fondos HD</div>
 
-    <div class="canvas-container">
-        <canvas id="wallpaperCanvas"></canvas>
-    </div>
-
-    <div class="controls">
-        <p class="section-title"> 1. Paleta de Colores</p>
-        <div class="palette-container">
-            <button class="palette-btn active" onclick="setGradient('#f5f3ff', '#fbcfe8', this)">
-                <div class="color-block" style="background-color: #f5f3ff;"></div>
-                <div class="color-block" style="background-color: #fbcfe8;"></div>
-            </button>
-            <button class="palette-btn" onclick="setGradient('#ffedd5', '#fecdd3', this)">
-                <div class="color-block" style="background-color: #ffedd5;"></div>
-                <div class="color-block" style="background-color: #fecdd3;"></div>
-            </button>
-            <button class="palette-btn" onclick="setGradient('#e0e7ff', '#c7d2fe', this)">
-                <div class="color-block" style="background-color: #e0e7ff;"></div>
-                <div class="color-block" style="background-color: #c7d2fe;"></div>
-            </button>
-            <button class="palette-btn" onclick="setGradient('#ecfccb', '#ccfbf1', this)">
-                <div class="color-block" style="background-color: #ecfccb;"></div>
-                <div class="color-block" style="background-color: #ccfbf1;"></div>
-            </button>
+        <div class="preview-box">
+            <canvas id="wallpaperCanvas"></canvas>
         </div>
 
-        <p class="section-title"> 2. Tamaño del elemento</p>
-        <div class="tool-group">
-            <input type="range" id="sizeSlider" class="slider" min="20" max="150" value="60">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('fondo', this)">Fondo</button>
+            <button class="tab-btn" onclick="switchTab('emojis', this)">Emojis</button>
+            <button class="tab-btn" onclick="switchTab('texto', this)">Texto</button>
         </div>
 
-        <p class="section-title"> 3. Elegí un Centro (Toca para estampar)</p>
-        <div class="emoji-container">
-            <button class="emoji-btn" onclick="selectEmoji('&#x2764;&#xFE0F;', this)">&#x2764;&#xFE0F;</button>
-            <button class="emoji-btn" onclick="selectEmoji('&#x1F499;', this)">&#x1F499;</button>
-            <button class="emoji-btn" onclick="selectEmoji('&#x1F49C;', this)">&#x1F49C;</button>
-            <button class="emoji-btn" onclick="selectEmoji('&#x1F525;', this)">&#x1F525;</button>
-            <button class="emoji-btn" onclick="selectEmoji('&#x2728;', this)">&#x2728;</button>
-            <button class="emoji-btn" onclick="selectEmoji('&#x1F33B;', this)">&#x1F33B;</button>
-            <button class="emoji-btn" onclick="selectEmoji('&#x1F352;', this)">&#x1F352;</button>
-            <button class="emoji-btn" onclick="selectEmoji('&#x1F349;', this)">&#x1F349;</button>
-            <button class="emoji-btn" onclick="selectEmoji('&#x1F9C9;', this)">&#x1F9C9;</button>
-            <button class="emoji-btn" onclick="selectEmoji('&#x1F431;', this)">&#x1F431;</button>
-            <button class="emoji-btn" onclick="selectEmoji('&#x1F436;', this)">&#x1F436;</button>
-            <button class="emoji-btn" onclick="selectEmoji('&#x1F43B;', this)">&#x1F43B;</button>
-            <button class="emoji-btn" onclick="selectEmoji('&#x1F98A;', this)">&#x1F98A;</button>
-            <button class="emoji-btn" onclick="selectEmoji('&#x1F34F;', this)">&#x1F34F;</button>
-            <button class="emoji-btn" onclick="selectEmoji('&#x1F375;', this)">&#x1F375;</button>
-        </div>
+        <div id="tab-fondo" class="tab-content active">
+            <label class="label-text">¿Usar imagen propia de fondo?</label>
+            <label class="file-upload-btn">
+                 Subir Foto desde Galería
+                <input type="file" id="bgImageInput" accept="image/*" style="display: none;" onchange="uploadBackground(this)">
+            </label>
 
-        <p class="section-title"> 4. Agregar Texto</p>
-        <div class="tool-group">
-            <input type="text" id="textInput" class="input-text" placeholder="Escribí tu frase...">
-            <div class="row">
-                <label style="font-size: 0.85rem;">Color:</label>
-                <input type="color" id="textColor" class="color-picker" value="#4c1d95">
-                <button style="background: #6d28d9; color:white; border:none; padding: 6px 12px; border-radius:6px; font-size:0.8rem; font-weight:600; cursor:pointer;" onclick="addText()">Poner Texto</button>
+            <label class="label-text">Personalizar Colores Manuales</label>
+            <div class="color-row">
+                <div class="color-input-container">
+                    <span style="font-size: 0.7rem; color: #6b7280;">Color 1</span>
+                    <input type="color" id="bgColor1" class="color-picker" value="#ffb3b3" onchange="updateColors()">
+                </div>
+                <div class="color-input-container">
+                    <span style="font-size: 0.7rem; color: #6b7280;">Color 2</span>
+                    <input type="color" id="bgColor2" class="color-picker" value="#ffb3b3" onchange="updateColors()">
+                </div>
+            </div>
+
+            <label class="label-text">Dirección si usás Degradado</label>
+            <div class="direction-row">
+                <button class="dir-btn active" id="dir-v" onclick="setDirection('v')"> Vertical</button>
+                <button class="dir-btn" id="dir-h" onclick="setDirection('h')"> Horizontal</button>
+                <button class="dir-btn" id="dir-d" onclick="setDirection('d')"> Diagonal</button>
+            </div>
+
+            <label class="label-text">Colores Pasteles Lisos Fijos</label>
+            <div class="pastel-row">
+                <div class="pastel-circle" style="background: #ffb3b3;" onclick="setPastel('#ffb3b3')"></div>
+                <div class="pastel-circle" style="background: #ffe3b3;" onclick="setPastel('#ffe3b3')"></div>
+                <div class="pastel-circle" style="background: #ffffcc;" onclick="setPastel('#ffffcc')"></div>
+                <div class="pastel-circle" style="background: #c2fbc2;" onclick="setPastel('#c2fbc2')"></div>
+                <div class="pastel-circle" style="background: #cce6ff;" onclick="setPastel('#cce6ff')"></div>
+                <div class="pastel-circle" style="background: #e6ccff;" onclick="setPastel('#e6ccff')"></div>
             </div>
         </div>
 
-        <button class="btn-action" onclick="clearCanvas()">Borrar todo</button>
-        <button class="btn-download" onclick="downloadWallpaper()">Descargar Fondo (HD)</button>
+        <div id="tab-emojis" class="tab-content">
+            <label class="label-text"> Tamaño del Emoji</label>
+            <input type="range" id="emojiSize" class="slider" min="20" max="150" value="60">
+
+            <label class="label-text"> Seleccioná y tocá el fondo para estampar</button>
+            <div class="emoji-grid">
+                <button class="emoji-btn" onclick="selectEmoji('&#x1F525;', this)">&#x1F525;</button>
+                <button class="emoji-btn" onclick="selectEmoji('&#x2764;&#xFE0F;', this)">&#x2764;&#xFE0F;</button>
+                <button class="emoji-btn" onclick="selectEmoji('&#x1F499;', this)">&#x1F499;</button>
+                <button class="emoji-btn" onclick="selectEmoji('&#x1F49C;', this)">&#x1F49C;</button>
+                <button class="emoji-btn" onclick="selectEmoji('&#x2728;', this)">&#x2728;</button>
+                <button class="emoji-btn" onclick="selectEmoji('&#x1F33B;', this)">&#x1F33B;</button>
+                <button class="emoji-btn" onclick="selectEmoji('&#x1F352;', this)">&#x1F352;</button>
+                <button class="emoji-btn" onclick="selectEmoji('&#x1F349;', this)">&#x1F349;</button>
+                <button class="emoji-btn" onclick="selectEmoji('&#x1F9C9;', this)">&#x1F9C9;</button>
+                <button class="emoji-btn" onclick="selectEmoji('&#x1F431;', this)">&#x1F431;</button>
+            </div>
+            <button class="btn-add-text" style="background: #ef4444; margin-top: 10px;" onclick="clearCanvas()">Borrar Estampas</button>
+        </div>
+
+        <div id="tab-texto" class="tab-content">
+            <label class="label-text"> Escribí tu Frase</label>
+            <input type="text" id="textInput" class="input-text" placeholder="Tu texto acá...">
+            
+            <label class="label-text"> Color del Texto</label>
+            <input type="color" id="textColor" class="color-picker" value="#000000" style="margin-bottom: 12px;">
+
+            <label class="label-text"> Tamaño del Texto</label>
+            <input type="range" id="textSize" class="slider" min="20" max="120" value="50">
+
+            <button class="btn-add-text" onclick="addText()">Poner Texto en Pantalla</button>
+        </div>
+
+        <button class="btn-download" onclick="downloadWallpaper()"> Descargar Fondo PNG</button>
     </div>
 
     <script>
         const canvas = document.getElementById('wallpaperCanvas');
         const ctx = canvas.getContext('2d');
-        const sizeSlider = document.getElementById('sizeSlider');
-        const textInput = document.getElementById('textInput');
-        const textColor = document.getElementById('textColor');
-
-        let currentGrad = { c1: '#f5f3ff', c2: '#fbcfe8' };
-        let activeEmoji = null;
+        
         let elements = [];
+        let activeEmoji = null;
+        let bgDirection = 'v';
+        let bgImage = null;
 
         function initCanvas() {
             canvas.width = 1080;
@@ -281,12 +352,27 @@
         }
 
         function draw() {
-            let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-            gradient.addColorStop(0, currentGrad.c1);
-            gradient.addColorStop(1, currentGrad.c2);
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+            // 1. Dibujar Fondo (Imagen o Degradado)
+            if (bgImage) {
+                ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+            } else {
+                let c1 = document.getElementById('bgColor1').value;
+                let c2 = document.getElementById('bgColor2').value;
+                let grad;
+                
+                if (bgDirection === 'v') grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                else if (bgDirection === 'h') grad = ctx.createLinearGradient(0, 0, canvas.width, 0);
+                else grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+
+                grad.addColorStop(0, c1);
+                grad.addColorStop(1, c2);
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+
+            // 2. Dibujar Elementos (Emojis/Textos)
             elements.forEach(el => {
                 ctx.save();
                 if (el.type === 'emoji') {
@@ -305,37 +391,76 @@
             });
         }
 
-        function setGradient(color1, color2, btn) {
-            currentGrad = { c1: color1, c2: color2 };
-            document.querySelectorAll('.palette-btn').forEach(b => b.classList.remove('active'));
+        // Cambio de Pestañas
+        function switchTab(tabName, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             btn.classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+
+        // Funciones del Fondo
+        function updateColors() {
+            bgImage = null;
             draw();
         }
 
-        function selectEmoji(emojiCode, btn) {
-            activeEmoji = emojiCode;
-            textInput.value = '';
+        function setDirection(dir) {
+            bgDirection = dir;
+            document.querySelectorAll('.dir-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`dir-${dir}`).classList.add('active');
+            bgImage = null;
+            draw();
+        }
+
+        function setPastel(color) {
+            document.getElementById('bgColor1').value = color;
+            document.getElementById('bgColor2').value = color;
+            bgImage = null;
+            draw();
+        }
+
+        function uploadBackground(input) {
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    let img = new Image();
+                    img.onload = function() {
+                        bgImage = img;
+                        draw();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Funciones de Emojis y Textos
+        function selectEmoji(emojiHex, btn) {
+            activeEmoji = emojiHex;
             document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
         }
 
         function addText() {
-            if(textInput.value.trim() !== "") {
+            let txt = document.getElementById('textInput').value;
+            if (txt.trim() !== "") {
                 activeEmoji = null;
                 document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('active'));
                 elements.push({
                     type: 'text',
-                    content: textInput.value,
+                    content: txt,
                     x: canvas.width / 2,
                     y: canvas.height / 2,
-                    size: parseInt(sizeSlider.value),
-                    color: textColor.value
+                    size: parseInt(document.getElementById('textSize').value),
+                    color: document.getElementById('textColor').value
                 });
                 draw();
             }
         }
 
-        canvas.addEventListener('click', handleAction);
+        // Manejo de clicks en el marco
+        canvas.addEventListener('click', handleCanvasClick);
         canvas.addEventListener('touchstart', function(e) {
             e.preventDefault();
             let touch = e.touches[0];
@@ -346,7 +471,7 @@
             canvas.dispatchEvent(mouseEvent);
         }, { passive: false });
 
-        function handleAction(e) {
+        function handleCanvasClick(e) {
             let rect = canvas.getBoundingClientRect();
             let scaleX = canvas.width / rect.width;
             let scaleY = canvas.height / rect.height;
@@ -360,7 +485,7 @@
                     content: activeEmoji,
                     x: clickX,
                     y: clickY,
-                    size: parseInt(sizeSlider.value)
+                    size: parseInt(document.getElementById('emojiSize').value)
                 });
                 draw();
             } else {
@@ -376,7 +501,6 @@
         function clearCanvas() {
             elements = [];
             activeEmoji = null;
-            textInput.value = '';
             document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('active'));
             draw();
         }
@@ -393,4 +517,3 @@
     </script>
 </body>
 </html>
-
