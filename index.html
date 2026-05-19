@@ -49,7 +49,7 @@
         }
 
         #emojiDisplay {
-            font-size: 5rem;
+            font-size: 5.5rem;
             transition: transform 0.2s ease;
             user-select: none;
         }
@@ -61,6 +61,8 @@
             padding: 20px;
             border-radius: 20px;
             box-shadow: 0 4px 15px rgba(124, 58, 237, 0.08);
+            max-height: 45vh;
+            overflow-y: auto;
         }
 
         .section-title {
@@ -119,6 +121,9 @@
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .emoji-btn:active {
@@ -144,6 +149,8 @@
             cursor: pointer;
             text-align: center;
             box-shadow: 0 4px 12px rgba(109, 40, 217, 0.2);
+            position: sticky;
+            bottom: 0;
         }
     </style>
 </head>
@@ -152,7 +159,7 @@
     <h1> Creador de Wallpapers</h1>
 
     <div class="preview-card" id="wallpaperPreview">
-        <div id="emojiDisplay"></div>
+        <div id="emojiDisplay"></div>
     </div>
 
     <div class="controls">
@@ -176,17 +183,44 @@
             </button>
         </div>
 
-        <p class="section-title"> 2. Elegí un Centro</p>
+        <p class="section-title"> 2. Elegi un Centro</p>
         <div class="emoji-container">
-            <button class="emoji-btn active" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn active" onclick="changeEmoji('', this)"></button>
             <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
             <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
             <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
             <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
             <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
             <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
             <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+
             <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
+            <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
             <button class="emoji-btn" onclick="changeEmoji('', this)"></button>
         </div>
 
@@ -197,7 +231,6 @@
         const preview = document.getElementById('wallpaperPreview');
         const emojiDisplay = document.getElementById('emojiDisplay');
         
-        // Inicialización
         preview.style.background = "linear-gradient(135deg, #f5f3ff 0%, #fbcfe8 100%)";
 
         function changeGradient(color1, color2, element) {
@@ -213,7 +246,7 @@
         }
 
         function downloadNotice() {
-            alert('¡Fondo listo! Para guardarlo en tu celu, mantené apretada la imagen del fondo de arriba y dale a "Descargar imagen".');
+            alert('¡Fondo listo! Para guardarlo en tu celu, mantene apretada la imagen de arriba y dale a "Descargar imagen".');
         }
     </script>
 
