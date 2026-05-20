@@ -41,9 +41,11 @@
             margin-bottom: 12px;
         }
 
+        /* CORRECCIÓN INTERFAZ: Limitamos el alto máximo para que no pise los botones */
         .preview-box {
             width: 100%;
             aspect-ratio: 9 / 16;
+            max-height: 42vh; 
             border-radius: 15px;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
             margin-bottom: 15px;
@@ -59,6 +61,7 @@
             cursor: move;
         }
 
+        /* CORRECCIÓN INTERFAZ: Forzamos a que el menú esté siempre al frente de todo */
         .tabs {
             display: flex;
             width: 100%;
@@ -66,13 +69,15 @@
             padding: 4px;
             border-radius: 10px;
             margin-bottom: 15px;
+            position: relative;
+            z-index: 999;
         }
 
         .tab-btn {
             flex: 1;
             background: none;
             border: none;
-            padding: 8px 0;
+            padding: 10px 0;
             font-size: 0.85rem;
             font-weight: 600;
             color: #4b5563;
@@ -87,9 +92,12 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
+        /* CORRECCIÓN INTERFAZ: Forzamos a que el panel de control esté al frente */
         .tab-content {
             display: none;
             width: 100%;
+            position: relative;
+            z-index: 999;
         }
 
         .tab-content.active {
@@ -185,7 +193,7 @@
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 6px;
-            max-height: 180px;
+            max-height: 150px;
             overflow-y: auto;
             padding-right: 2px;
         }
@@ -242,6 +250,8 @@
             cursor: pointer;
             margin-top: 15px;
             box-shadow: 0 4px 6px rgba(147, 51, 234, 0.2);
+            position: relative;
+            z-index: 999;
         }
     </style>
 </head>
@@ -369,7 +379,6 @@
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // 1. Dibujar Fondo base
             if (bgImage) {
                 ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
             } else {
@@ -385,14 +394,13 @@
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
 
-            // 2. Patrón repetido de fondo (Corregido el renderizado)
             if (currentEmoji !== "") {
                 let pSize = parseInt(document.getElementById('patternSize').value) * 1.5;
                 ctx.save();
                 ctx.font = `${pSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.globalAlpha = 0.4;
+                ctx.globalAlpha = 0.35;
 
                 for (let x = pSize / 2; x < canvas.width + pSize; x += pSize * 1.6) {
                     for (let y = pSize / 2; y < canvas.height + pSize; y += pSize * 1.9) {
@@ -401,7 +409,6 @@
                 }
                 ctx.restore();
 
-                // 3. Emoji central destacado (Corregido el renderizado)
                 let eSize = parseInt(document.getElementById('emojiSize').value);
                 ctx.save();
                 ctx.font = `${eSize * 2.3}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
@@ -411,7 +418,6 @@
                 ctx.restore();
             }
 
-            // 4. Dibujar Texto
             if (textContent.trim() !== "") {
                 let size = parseInt(document.getElementById('textSize').value);
                 let color = document.getElementById('textColor').value;
@@ -456,7 +462,6 @@
             }
         }
 
-        // Sistema simplificado y directo de emojis
         function setEmoji(emoji, btn) {
             currentEmoji = emoji;
             document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('active'));
@@ -467,21 +472,32 @@
         function clearEmojis() { currentEmoji = ""; document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('active')); draw(); }
         function clearText() { document.getElementById('textInput').value = ""; textContent = ""; draw(); }
 
-        // --- MANEJO DE ARRASTRE SIN INTERFERENCIAS ---
+        // --- ENRUTAMIENTO INTELIGENTE DE TOQUES ---
         canvas.addEventListener('mousedown', startDrag);
         canvas.addEventListener('mousemove', drag);
         canvas.addEventListener('mouseup', endDrag);
 
         canvas.addEventListener('touchstart', function(e) {
-            e.preventDefault(); // Evita que se mueva la pantalla al arrastrar
             let touch = e.touches[0];
+            let target = document.elementFromPoint(touch.clientX, touch.clientY);
+            
+            // Si el dedo tocó un botón del menú o sliders, dejamos que actúe el botón normal
+            if (target && (target.closest('.tabs') || target.closest('.tab-content'))) {
+                return; 
+            }
+            
+            e.preventDefault();
             let mouseEvent = new MouseEvent("mousedown", { clientX: touch.clientX, clientY: touch.clientY });
             canvas.dispatchEvent(mouseEvent);
         }, { passive: false });
 
         canvas.addEventListener('touchmove', function(e) {
-            e.preventDefault(); // Evita que se mueva la pantalla al arrastrar
             let touch = e.touches[0];
+            let target = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (target && (target.closest('.tabs') || target.closest('.tab-content'))) {
+                return;
+            }
+            e.preventDefault();
             let mouseEvent = new MouseEvent("mousemove", { clientX: touch.clientX, clientY: touch.clientY });
             canvas.dispatchEvent(mouseEvent);
         }, { passive: false });
@@ -508,28 +524,4 @@
 
             if (distEmoji < 160 && currentEmoji !== "") {
                 isDraggingEmoji = true;
-            } else if (distText < 160 && textContent !== "") {
-                isDraggingText = true;
-            }
-        }
-
-        function drag(e) {
-            if (!isDraggingEmoji && !isDraggingText) return;
-            let coords = getCanvasCoords(e);
-
-            if (isDraggingEmoji) {
-                emojiPos.x = coords.x;
-                emojiPos.y = coords.y;
-            } else if (isDraggingText) {
-                textPos.x = coords.x;
-                textPos.y = coords.y;
-            }
-            draw();
-        }
-
-        function endDrag() {
-            isDraggingEmoji = false;
-            isDraggingText = false;
-        }
-
-        function d
+            } else 
