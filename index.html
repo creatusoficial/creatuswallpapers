@@ -131,7 +131,7 @@
         .color-picker {
             width: 100%;
             height: 35px;
-            border: none;
+            border: 1px solid #d1d5db;
             border-radius: 6px;
             cursor: pointer;
             padding: 0;
@@ -271,11 +271,11 @@
             <div class="color-row">
                 <div class="color-input-container">
                     <span style="font-size: 0.7rem; color: #6b7280;">Color 1</span>
-                    <input type="color" id="bgColor1" class="color-picker" value="#ffb3b3" onchange="updateColors()">
+                    <input type="color" id="bgColor1" class="color-picker" value="#ffb3b3" oninput="updateColors()">
                 </div>
                 <div class="color-input-container">
                     <span style="font-size: 0.7rem; color: #6b7280;">Color 2</span>
-                    <input type="color" id="bgColor2" class="color-picker" value="#ffb3b3" onchange="updateColors()">
+                    <input type="color" id="bgColor2" class="color-picker" value="#ffb3b3" oninput="updateColors()">
                 </div>
             </div>
 
@@ -306,26 +306,26 @@
 
             <label class="label-text"> Toca un emoji para activarlo</label>
             <div class="emoji-grid">
-                <button class="emoji-btn" onclick="setEmoji('&#x1F347;', this)"></button>
-                <button class="emoji-btn" onclick="setEmoji('&#x1F352;', this)"></button>
-                <button class="emoji-btn" onclick="setEmoji('&#x1F353;', this)"></button>
-                <button class="emoji-btn" onclick="setEmoji('&#x1F349;', this)"></button>
-                <button class="emoji-btn" onclick="setEmoji('&#x1F370;', this)"></button>
-                <button class="emoji-btn" onclick="setEmoji('&#x1F9C1;', this)"></button>
-                <button class="emoji-btn" onclick="setEmoji('&#x1F36A;', this)"></button>
-                <button class="emoji-btn" onclick="setEmoji('&#x1F369;', this)"></button>
-                <button class="emoji-btn" onclick="setEmoji('&#x1F377;', this)"></button>
-                <button class="emoji-btn" onclick="setEmoji('&#x1F9C9;', this)"></button>
-                <button class="emoji-btn" onclick="setEmoji('&#x1F319;', this)"></button>
-                <button class="emoji-btn" onclick="setEmoji('&#x2600;&#xFE0F;', this)"></button>
-                <button class="emoji-btn" onclick="setEmoji('&#x2728;', this)"></button>
-                <button class="emoji-btn" onclick="setEmoji('&#x1F525;', this)"></button>
-                <button class="emoji-btn" onclick="setEmoji('&#x1F33B;', this)"></button>
-                <button class="emoji-btn" onclick="setEmoji('&#x1F48B;', this)"></button>
-                <button class="emoji-btn" onclick="setEmoji('&#x1F90F;', this)"></button>
-                <button class="emoji-btn" onclick="setEmoji('&#x1F555;', this)"></button>
-                <button class="emoji-btn" onclick="setEmoji('&#x1F918;', this)"></button>
-                <button class="emoji-btn" onclick="setEmoji('&#x2764;&#xFE0F;', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
+                <button class="emoji-btn" onclick="setEmoji('', this)"></button>
             </div>
             <button class="btn-action" onclick="clearEmojis()">Quitar Emojis</button>
         </div>
@@ -335,7 +335,7 @@
             <input type="text" id="textInput" class="input-text" placeholder="Tu texto acá..." oninput="updateText()">
             
             <label class="label-text"> Color del Texto</label>
-            <input type="color" id="textColor" class="color-picker" value="#000000" style="margin-bottom: 12px;" onchange="draw()">
+            <input type="color" id="textColor" class="color-picker" value="#000000" style="margin-bottom: 12px;" oninput="draw()">
 
             <label class="label-text"> Tamaño del Texto</label>
             <input type="range" id="textSize" class="slider" min="20" max="150" value="60" oninput="draw()">
@@ -355,7 +355,6 @@
         let bgDirection = 'v';
         let bgImage = null;
 
-        // Posiciones iniciales para arrastrar con el dedo
         let emojiPos = { x: 540, y: 860 };
         let textPos = { x: 540, y: 1100 };
         let isDraggingEmoji = false;
@@ -370,7 +369,7 @@
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // 1. Dibujar Fondo base (Degradado o Imagen)
+            // 1. Dibujar Fondo base
             if (bgImage) {
                 ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
             } else {
@@ -386,24 +385,23 @@
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
 
-            // 2. NUEVO: Si hay un emoji seleccionado, dibuja el PATRÓN repetido de fondo
+            // 2. Patrón repetido de fondo
             if (currentEmoji !== "") {
                 let pSize = parseInt(document.getElementById('patternSize').value) * 1.5;
                 ctx.save();
                 ctx.font = `${pSize}px sans-serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.globalAlpha = 0.85; // Opacidad linda para que no tape todo
+                ctx.globalAlpha = 0.4; // Bajé la opacidad un poquito para que se vea más estético
 
-                // Bucle para llenar todo el alto y ancho del fondo
-                for (let x = pSize / 2; x < canvas.width + pSize; x += pSize * 1.5) {
-                    for (let y = pSize / 2; y < canvas.height + pSize; y += pSize * 1.8) {
+                for (let x = pSize / 2; x < canvas.width + pSize; x += pSize * 1.6) {
+                    for (let y = pSize / 2; y < canvas.height + pSize; y += pSize * 1.9) {
                         ctx.fillText(currentEmoji, x, y);
                     }
                 }
                 ctx.restore();
 
-                // 3. Dibuja el mismo emoji en el CENTRO de forma destacada (Movible)
+                // 3. Emoji central destacado (Movible)
                 let eSize = parseInt(document.getElementById('emojiSize').value);
                 ctx.save();
                 ctx.font = `${eSize * 2.3}px sans-serif`;
@@ -427,7 +425,6 @@
             }
         }
 
-        // Manejo de pestañas
         function switchTab(tabName, btn) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -459,9 +456,8 @@
             }
         }
 
-        // Acciones de Emojis y Frase
-        function setEmoji(emojiHex, btn) {
-            currentEmoji = emojiHex;
+        function setEmoji(emoji, btn) {
+            currentEmoji = emoji;
             document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             draw();
@@ -470,7 +466,7 @@
         function clearEmojis() { currentEmoji = ""; document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('active')); draw(); }
         function clearText() { document.getElementById('textInput').value = ""; textContent = ""; draw(); }
 
-        // --- SISTEMA INTERACTIVO TÁCTIL (Mover elementos en la pantalla) ---
+        // --- MANEJO DE EVENTOS TÁCTILES MEJORADO ---
         canvas.addEventListener('mousedown', startDrag);
         canvas.addEventListener('mousemove', drag);
         canvas.addEventListener('mouseup', endDrag);
@@ -479,14 +475,13 @@
             let touch = e.touches[0];
             let mouseEvent = new MouseEvent("mousedown", { clientX: touch.clientX, clientY: touch.clientY });
             canvas.dispatchEvent(mouseEvent);
-        }, { passive: false });
+        }, { passive: true });
 
         canvas.addEventListener('touchmove', function(e) {
-            e.preventDefault();
             let touch = e.touches[0];
             let mouseEvent = new MouseEvent("mousemove", { clientX: touch.clientX, clientY: touch.clientY });
             canvas.dispatchEvent(mouseEvent);
-        }, { passive: false });
+        }, { passive: true });
 
         canvas.addEventListener('touchend', function() {
             let mouseEvent = new MouseEvent("mouseup", {});
@@ -505,15 +500,12 @@
 
         function startDrag(e) {
             let coords = getCanvasCoords(e);
-            
-            // Distancia al centro del emoji
             let distEmoji = Math.sqrt(Math.pow(coords.x - emojiPos.x, 2) + Math.pow(coords.y - emojiPos.y, 2));
-            // Distancia al texto
             let distText = Math.sqrt(Math.pow(coords.x - textPos.x, 2) + Math.pow(coords.y - textPos.y, 2));
 
-            if (distEmoji < 150 && currentEmoji !== "") {
+            if (distEmoji < 160 && currentEmoji !== "") {
                 isDraggingEmoji = true;
-            } else if (distText < 150 && textContent !== "") {
+            } else if (distText < 160 && textContent !== "") {
                 isDraggingText = true;
             }
         }
@@ -527,4 +519,25 @@
                 emojiPos.y = coords.y;
             } else if (isDraggingText) {
                 textPos.x = coords.x;
-                
+                textPos.y = coords.y;
+            }
+            draw();
+        }
+
+        function endDrag() {
+            isDraggingEmoji = false;
+            isDraggingText = false;
+        }
+
+        function downloadWallpaper() {
+            const image = canvas.toDataURL("image/png");
+            const link = document.createElement('a');
+            link.download = 'creatus-wallpaper.png';
+            link.href = image;
+            link.click();
+        }
+
+        window.onload = initCanvas;
+    </script>
+</body>
+</html>
