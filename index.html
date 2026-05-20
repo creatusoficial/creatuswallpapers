@@ -385,10 +385,11 @@
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
 
+            // CORRECCIÓN FUENTE: Forzamos el uso de fuentes de sistema nativas para asegurar emojis a color
             if (currentEmoji !== "") {
                 let pSize = parseInt(document.getElementById('patternSize').value) * 1.5;
                 ctx.save();
-                ctx.font = `${pSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+                ctx.font = `${pSize}px sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.globalAlpha = 0.35;
@@ -402,7 +403,7 @@
 
                 let eSize = parseInt(document.getElementById('emojiSize').value);
                 ctx.save();
-                ctx.font = `${eSize * 2.3}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+                ctx.font = `${eSize * 2.3}px sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(currentEmoji, emojiPos.x, emojiPos.y);
@@ -413,7 +414,7 @@
                 let size = parseInt(document.getElementById('textSize').value);
                 let color = document.getElementById('textColor').value;
                 ctx.save();
-                ctx.font = `bold ${size * 1.8}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+                ctx.font = `bold ${size * 1.8}px sans-serif`;
                 ctx.fillStyle = color;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
@@ -463,7 +464,6 @@
         function clearEmojis() { currentEmoji = ""; document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('active')); draw(); }
         function clearText() { document.getElementById('textInput').value = ""; textContent = ""; draw(); }
 
-        // --- SISTEMA INTERACTIVO CORREGIDO Y SEPARADO ---
         function getCanvasCoords(e) {
             let rect = canvas.getBoundingClientRect();
             let scaleX = canvas.width / rect.width;
@@ -510,7 +510,6 @@
             isDraggingText = false;
         }
 
-        // Asignación limpia de eventos únicamente al Canvas
         canvas.addEventListener('mousedown', handleStart);
         canvas.addEventListener('mousemove', handleMove);
         canvas.addEventListener('mouseup', handleEnd);
