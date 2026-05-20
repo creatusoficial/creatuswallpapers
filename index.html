@@ -385,14 +385,14 @@
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
 
-            // 2. Patrón repetido de fondo
+            // 2. Patrón repetido de fondo (Corregido el renderizado)
             if (currentEmoji !== "") {
                 let pSize = parseInt(document.getElementById('patternSize').value) * 1.5;
                 ctx.save();
-                ctx.font = `${pSize}px sans-serif`;
+                ctx.font = `${pSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.globalAlpha = 0.4; // Bajé la opacidad un poquito para que se vea más estético
+                ctx.globalAlpha = 0.4;
 
                 for (let x = pSize / 2; x < canvas.width + pSize; x += pSize * 1.6) {
                     for (let y = pSize / 2; y < canvas.height + pSize; y += pSize * 1.9) {
@@ -401,22 +401,22 @@
                 }
                 ctx.restore();
 
-                // 3. Emoji central destacado (Movible)
+                // 3. Emoji central destacado (Corregido el renderizado)
                 let eSize = parseInt(document.getElementById('emojiSize').value);
                 ctx.save();
-                ctx.font = `${eSize * 2.3}px sans-serif`;
+                ctx.font = `${eSize * 2.3}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(currentEmoji, emojiPos.x, emojiPos.y);
                 ctx.restore();
             }
 
-            // 4. Dibujar Texto (Movible)
+            // 4. Dibujar Texto
             if (textContent.trim() !== "") {
                 let size = parseInt(document.getElementById('textSize').value);
                 let color = document.getElementById('textColor').value;
                 ctx.save();
-                ctx.font = `bold ${size * 1.8}px sans-serif`;
+                ctx.font = `bold ${size * 1.8}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
                 ctx.fillStyle = color;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
@@ -456,6 +456,7 @@
             }
         }
 
+        // Sistema simplificado y directo de emojis
         function setEmoji(emoji, btn) {
             currentEmoji = emoji;
             document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('active'));
@@ -466,24 +467,26 @@
         function clearEmojis() { currentEmoji = ""; document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('active')); draw(); }
         function clearText() { document.getElementById('textInput').value = ""; textContent = ""; draw(); }
 
-        // --- MANEJO DE EVENTOS TÁCTILES MEJORADO ---
+        // --- MANEJO DE ARRASTRE SIN INTERFERENCIAS ---
         canvas.addEventListener('mousedown', startDrag);
         canvas.addEventListener('mousemove', drag);
         canvas.addEventListener('mouseup', endDrag);
 
         canvas.addEventListener('touchstart', function(e) {
+            e.preventDefault(); // Evita que se mueva la pantalla al arrastrar
             let touch = e.touches[0];
             let mouseEvent = new MouseEvent("mousedown", { clientX: touch.clientX, clientY: touch.clientY });
             canvas.dispatchEvent(mouseEvent);
-        }, { passive: true });
+        }, { passive: false });
 
         canvas.addEventListener('touchmove', function(e) {
+            e.preventDefault(); // Evita que se mueva la pantalla al arrastrar
             let touch = e.touches[0];
             let mouseEvent = new MouseEvent("mousemove", { clientX: touch.clientX, clientY: touch.clientY });
             canvas.dispatchEvent(mouseEvent);
-        }, { passive: true });
+        }, { passive: false });
 
-        canvas.addEventListener('touchend', function() {
+        canvas.addEventListener('touchend', function(e) {
             let mouseEvent = new MouseEvent("mouseup", {});
             canvas.dispatchEvent(mouseEvent);
         });
@@ -529,15 +532,4 @@
             isDraggingText = false;
         }
 
-        function downloadWallpaper() {
-            const image = canvas.toDataURL("image/png");
-            const link = document.createElement('a');
-            link.download = 'creatus-wallpaper.png';
-            link.href = image;
-            link.click();
-        }
-
-        window.onload = initCanvas;
-    </script>
-</body>
-</html>
+        function d
