@@ -3,45 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creador Creatus</title>
+    <title>Creador Creatus HD</title>
     <style>
-        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; background: #f0f0f0; padding: 10px; }
-        .canvas-container { width: 300px; height: 533px; background: white; border-radius: 15px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        #canvas { width: 100%; height: 100%; }
-        .controls { width: 300px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
-        button { padding: 10px; border: none; border-radius: 5px; background: white; font-size: 1.2rem; cursor: pointer; }
+        body { font-family: sans-serif; background: #f3f4f6; display: flex; flex-direction: column; align-items: center; padding: 10px; }
+        .main { width: 100%; max-width: 360px; background: white; padding: 15px; border-radius: 20px; }
+        .canvas-box { width: 100%; aspect-ratio: 9/16; background: #eee; border-radius: 15px; overflow: hidden; margin-bottom: 15px; }
+        #canvas { width: 100%; height: 100%; display: block; }
+        .controls { display: flex; flex-direction: column; gap: 10px; }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
+        button { padding: 8px; border: none; border-radius: 8px; background: #9333ea; color: white; cursor: pointer; }
+        .emoji-btn { background: #fff; border: 1px solid #ddd; font-size: 1.2rem; }
     </style>
 </head>
 <body>
 
-<div class="canvas-container">
-    <canvas id="canvas" width="300" height="533"></canvas>
+<div class="main">
+    <div class="canvas-box"><canvas id="canvas" width="1080" height="1920"></canvas></div>
+    
+    <div class="controls">
+        <label>Colores Fondo</label>
+        <div style="display:flex; gap:10px;">
+            <input type="color" id="c1" value="#ffb3b3" oninput="draw()">
+            <input type="color" id="c2" value="#cce6ff" oninput="draw()">
+        </div>
+        
+        <input type="text" id="textInput" placeholder="Escribí aquí..." oninput="draw()">
+        <input type="color" id="textColor" value="#000000" oninput="draw()">
+        <input type="range" id="sizeRange" min="50" max="300" value="100" oninput="draw()">
+        
+        <div class="grid" id="grid"></div>
+        <button onclick="download()">📥 Descargar</button>
+    </div>
 </div>
-
-<div class="controls" id="emojiGrid"></div>
 
 <script>
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
-    const emojis = ['🍇', '🍒', '🍓', '🍉', '🍰', '🧁', '🍪', '🍩', '🍷', '🧉', '🌙', '☀️', '✨', '🔥', '🌻', '💋', '🫶🏻', '🤘🏻', '❤️', '🦋'];
-    
-    // Dibujar fondo fijo inicial
-    ctx.fillStyle = '#ffb3b3';
-    ctx.fillRect(0, 0, 300, 533);
+    let items = []; // Objetos: {type: 'e'|'t', val: '...', x: 540, y: 960, size: 100}
 
-    const grid = document.getElementById('emojiGrid');
+    const emojis = ['🍇','🍒','🍓','🍉','🍰','🧁','🍪','🍩','🍷','🧉','🌙','☀️','✨','🔥','🌻','💋','🫶🏻','🤘🏻','❤️','🦋'];
+    
+    const grid = document.getElementById('grid');
     emojis.forEach(e => {
-        let btn = document.createElement('button');
-        btn.innerText = e;
-        btn.onclick = () => {
-            // Dibujamos el emoji directamente como texto, pero asegurando el contexto
-            ctx.font = '50px sans-serif';
+        let b = document.createElement('button');
+        b.className = 'emoji-btn';
+        b.innerText = e;
+        b.onclick = () => { items.push({type:'e', val:e, x:540, y:960, size:200}); draw(); };
+        grid.appendChild(b);
+    });
+
+    function draw() {
+        // Fondo
+        let grad = ctx.createLinearGradient(0,0,0,1920);
+        grad.addColorStop(0, document.getElementById('c1').value);
+        grad.addColorStop(1, document.getElementById('c2').value);
+        ctx.fillStyle = grad;
+        ctx.fillRect(0,0,1080,1920);
+
+        // Dibujar ítems
+        items.forEach(i => {
+            ctx.font = `${i.size}px sans-serif`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(e, Math.random() * 250 + 25, Math.random() * 480 + 25);
-        };
-        grid.appendChild(btn);
-    });
+            ctx.fillText(i.val, i.x, i.y);
+        });
+
+        // Dibujar texto principal
+        let txt = document.getElementById('textInput').value;
+        ctx.fillStyle = document.getElementById('textColor').value;
+        ctx.font = `bold ${document.getElementById('sizeRange').value}px sans-serif`;
+        ctx.fillText(txt, 540, 1500);
+    }
+
+    // Arrastre
+    let drag = null;
+    canvas.onmousedown = (e) => {
+        let r = canvas.getBoundingClientRect();
+        let x = (e.clientX - r.left) * (1080/r.width);
+        let y = (e.clientY - r.top) * (1920/r.height);
+        drag = items.find(i => Math.hypot(i.x - x, i.y - y) < 200);
+    };
+    canvas.onmousemove = (e) => {
+        if(!drag) return;
+        let r = canvas.getBoundingClientRect();
+        drag.x = (e.clientX - r.left) * (1080/r.width);
+        drag.y = (e.clientY - r.top) * (1920/r.height);
+        draw();
+    };
+    canvas.onmouseup = () => drag = null;
+
+    function download() {
+        let a = document.createElement('a');
+        a.href = canvas.toDataURL();
+        a.download = 'creatus.png';
+        a.click();
+    }
+    
+    draw();
 </script>
 </body>
 </html>
