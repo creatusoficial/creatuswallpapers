@@ -3,16 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creador Creatus HD</title>
+    <title>Creador de Fondos HD</title>
     <style>
-        body { font-family: sans-serif; background: #f3f4f6; display: flex; flex-direction: column; align-items: center; padding: 10px; }
-        .main { width: 100%; max-width: 360px; background: white; padding: 15px; border-radius: 20px; }
-        .canvas-box { width: 100%; aspect-ratio: 9/16; background: #eee; border-radius: 15px; overflow: hidden; margin-bottom: 15px; }
-        #canvas { width: 100%; height: 100%; display: block; }
-        .controls { display: flex; flex-direction: column; gap: 10px; }
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
-        button { padding: 8px; border: none; border-radius: 8px; background: #9333ea; color: white; cursor: pointer; }
-        .emoji-btn { background: #fff; border: 1px solid #ddd; font-size: 1.2rem; }
+        body { font-family: sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 10px; }
+        .main { width: 360px; background: white; padding: 15px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .canvas-box { width: 100%; aspect-ratio: 9/16; background: #eee; border-radius: 15px; overflow: hidden; border: 2px solid #ddd; margin-bottom: 15px; }
+        #canvas { width: 100%; height: 100%; }
+        .tabs { display: flex; background: #f3f4f6; padding: 4px; border-radius: 10px; margin-bottom: 15px; }
+        .tab { flex: 1; padding: 8px; text-align: center; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; color: #6b7280; }
+        .tab.active { background: white; color: black; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .control-group { margin-bottom: 15px; }
+        .label { font-size: 0.8rem; font-weight: 600; color: #4b5563; margin-bottom: 5px; }
+        .color-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .dir-row { display: flex; gap: 5px; margin-top: 5px; }
+        .btn-dir { padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; background: white; flex: 1; font-size: 0.75rem; cursor: pointer; }
+        .btn-dir.active { background: #8b5cf6; color: white; border: none; }
+        .pastels { display: flex; gap: 8px; justify-content: center; margin-top: 8px; }
+        .circle { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #ddd; cursor: pointer; }
+        .download-btn { width: 100%; background: #8b5cf6; color: white; padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -20,83 +28,65 @@
 <div class="main">
     <div class="canvas-box"><canvas id="canvas" width="1080" height="1920"></canvas></div>
     
-    <div class="controls">
-        <label>Colores Fondo</label>
-        <div style="display:flex; gap:10px;">
-            <input type="color" id="c1" value="#ffb3b3" oninput="draw()">
-            <input type="color" id="c2" value="#cce6ff" oninput="draw()">
-        </div>
-        
-        <input type="text" id="textInput" placeholder="Escribí aquí..." oninput="draw()">
-        <input type="color" id="textColor" value="#000000" oninput="draw()">
-        <input type="range" id="sizeRange" min="50" max="300" value="100" oninput="draw()">
-        
-        <div class="grid" id="grid"></div>
-        <button onclick="download()">📥 Descargar</button>
+    <div class="tabs">
+        <div class="tab active">Fondo</div>
+        <div class="tab">Emojis</div>
+        <div class="tab">Texto</div>
     </div>
+
+    <div class="control-group">
+        <label class="label">¿Usar imagen propia de fondo?</label>
+        <button style="width: 100%; padding: 10px; background: white; border: 1px solid #d1d5db; border-radius: 8px; cursor: pointer;">📁 Subir Foto desde Galería</button>
+    </div>
+
+    <div class="control-group">
+        <label class="label">Personalizar Colores Manuales</label>
+        <div class="color-inputs">
+            <input type="color" id="c1" value="#ffb3b3" oninput="draw()" style="width:100%; height:30px;">
+            <input type="color" id="c2" value="#ffb3b3" oninput="draw()" style="width:100%; height:30px;">
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="label">Dirección si usás Degradado</label>
+        <div class="dir-row">
+            <button class="btn-dir active">⬇️ Vertical</button>
+            <button class="btn-dir">➡️ Horizontal</button>
+            <button class="btn-dir">↘️ Diagonal</button>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label class="label">Colores Pasteles Lisos Fijos</label>
+        <div class="pastels">
+            <div class="circle" style="background:#ffb3b3" onclick="setPastel('#ffb3b3')"></div>
+            <div class="circle" style="background:#ffe3b3" onclick="setPastel('#ffe3b3')"></div>
+            <div class="circle" style="background:#ffffcc" onclick="setPastel('#ffffcc')"></div>
+            <div class="circle" style="background:#c2fbc2" onclick="setPastel('#c2fbc2')"></div>
+            <div class="circle" style="background:#cce6ff" onclick="setPastel('#cce6ff')"></div>
+            <div class="circle" style="background:#e6ccff" onclick="setPastel('#e6ccff')"></div>
+        </div>
+    </div>
+
+    <button class="download-btn">📥 Descargar Fondo PNG</button>
 </div>
 
 <script>
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
-    let items = []; // Objetos: {type: 'e'|'t', val: '...', x: 540, y: 960, size: 100}
-
-    const emojis = ['🍇','🍒','🍓','🍉','🍰','🧁','🍪','🍩','🍷','🧉','🌙','☀️','✨','🔥','🌻','💋','🫶🏻','🤘🏻','❤️','🦋'];
     
-    const grid = document.getElementById('grid');
-    emojis.forEach(e => {
-        let b = document.createElement('button');
-        b.className = 'emoji-btn';
-        b.innerText = e;
-        b.onclick = () => { items.push({type:'e', val:e, x:540, y:960, size:200}); draw(); };
-        grid.appendChild(b);
-    });
-
     function draw() {
-        // Fondo
         let grad = ctx.createLinearGradient(0,0,0,1920);
         grad.addColorStop(0, document.getElementById('c1').value);
         grad.addColorStop(1, document.getElementById('c2').value);
         ctx.fillStyle = grad;
         ctx.fillRect(0,0,1080,1920);
-
-        // Dibujar ítems
-        items.forEach(i => {
-            ctx.font = `${i.size}px sans-serif`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(i.val, i.x, i.y);
-        });
-
-        // Dibujar texto principal
-        let txt = document.getElementById('textInput').value;
-        ctx.fillStyle = document.getElementById('textColor').value;
-        ctx.font = `bold ${document.getElementById('sizeRange').value}px sans-serif`;
-        ctx.fillText(txt, 540, 1500);
     }
-
-    // Arrastre
-    let drag = null;
-    canvas.onmousedown = (e) => {
-        let r = canvas.getBoundingClientRect();
-        let x = (e.clientX - r.left) * (1080/r.width);
-        let y = (e.clientY - r.top) * (1920/r.height);
-        drag = items.find(i => Math.hypot(i.x - x, i.y - y) < 200);
-    };
-    canvas.onmousemove = (e) => {
-        if(!drag) return;
-        let r = canvas.getBoundingClientRect();
-        drag.x = (e.clientX - r.left) * (1080/r.width);
-        drag.y = (e.clientY - r.top) * (1920/r.height);
+    
+    function setPastel(c) {
+        document.getElementById('c1').value = c;
+        document.getElementById('c2').value = c;
         draw();
-    };
-    canvas.onmouseup = () => drag = null;
-
-    function download() {
-        let a = document.createElement('a');
-        a.href = canvas.toDataURL();
-        a.download = 'creatus.png';
-        a.click();
     }
     
     draw();
