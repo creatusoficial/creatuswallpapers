@@ -12,15 +12,16 @@
         .tabs { display: flex; background: #f3f4f6; padding: 4px; border-radius: 10px; margin-bottom: 15px; }
         .tab { flex: 1; padding: 8px; text-align: center; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; color: #6b7280; }
         .tab.active { background: white; color: black; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .control-group { margin-bottom: 15px; }
-        .label { font-size: 0.8rem; font-weight: 600; color: #4b5563; margin-bottom: 5px; }
+        .panel { display: none; }
+        .panel.active { display: block; }
+        .label { font-size: 0.8rem; font-weight: 600; color: #4b5563; margin-top: 10px; margin-bottom: 5px; display: block; }
         .color-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .dir-row { display: flex; gap: 5px; margin-top: 5px; }
         .btn-dir { padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; background: white; flex: 1; font-size: 0.75rem; cursor: pointer; }
         .btn-dir.active { background: #8b5cf6; color: white; border: none; }
         .pastels { display: flex; gap: 8px; justify-content: center; margin-top: 8px; }
         .circle { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #ddd; cursor: pointer; }
-        .download-btn { width: 100%; background: #8b5cf6; color: white; padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .download-btn { width: 100%; background: #8b5cf6; color: white; padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -29,64 +30,77 @@
     <div class="canvas-box"><canvas id="canvas" width="1080" height="1920"></canvas></div>
     
     <div class="tabs">
-        <div class="tab active">Fondo</div>
-        <div class="tab">Emojis</div>
-        <div class="tab">Texto</div>
+        <div class="tab active" onclick="showPanel('fondo', this)">Fondo</div>
+        <div class="tab" onclick="showPanel('emojis', this)">Emojis</div>
+        <div class="tab" onclick="showPanel('texto', this)">Texto</div>
     </div>
 
-    <div class="control-group">
+    <div id="fondo" class="panel active">
         <label class="label">¿Usar imagen propia de fondo?</label>
-        <button style="width: 100%; padding: 10px; background: white; border: 1px solid #d1d5db; border-radius: 8px; cursor: pointer;">📁 Subir Foto desde Galería</button>
-    </div>
-
-    <div class="control-group">
+        <button style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; cursor: pointer;">📁 Subir Foto desde Galería</button>
         <label class="label">Personalizar Colores Manuales</label>
         <div class="color-inputs">
-            <input type="color" id="c1" value="#ffb3b3" oninput="draw()" style="width:100%; height:30px;">
-            <input type="color" id="c2" value="#ffb3b3" oninput="draw()" style="width:100%; height:30px;">
+            <input type="color" id="c1" value="#ffb3b3" oninput="draw()">
+            <input type="color" id="c2" value="#ffb3b3" oninput="draw()">
         </div>
-    </div>
-
-    <div class="control-group">
-        <label class="label">Dirección si usás Degradado</label>
+        <label class="label">Dirección degradado</label>
         <div class="dir-row">
             <button class="btn-dir active">⬇️ Vertical</button>
             <button class="btn-dir">➡️ Horizontal</button>
             <button class="btn-dir">↘️ Diagonal</button>
         </div>
-    </div>
-
-    <div class="control-group">
-        <label class="label">Colores Pasteles Lisos Fijos</label>
         <div class="pastels">
             <div class="circle" style="background:#ffb3b3" onclick="setPastel('#ffb3b3')"></div>
             <div class="circle" style="background:#ffe3b3" onclick="setPastel('#ffe3b3')"></div>
-            <div class="circle" style="background:#ffffcc" onclick="setPastel('#ffffcc')"></div>
-            <div class="circle" style="background:#c2fbc2" onclick="setPastel('#c2fbc2')"></div>
             <div class="circle" style="background:#cce6ff" onclick="setPastel('#cce6ff')"></div>
-            <div class="circle" style="background:#e6ccff" onclick="setPastel('#e6ccff')"></div>
         </div>
     </div>
 
-    <button class="download-btn">📥 Descargar Fondo PNG</button>
+    <div id="emojis" class="panel"><p style="font-size:0.8rem; color:#666;">Seleccioná emojis aquí...</p></div>
+    <div id="texto" class="panel"><p style="font-size:0.8rem; color:#666;">Configurá tu texto aquí...</p></div>
+
+    <button class="download-btn" onclick="download()">📥 Descargar Fondo PNG</button>
 </div>
 
 <script>
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     
+    function showPanel(id, btn) {
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        btn.classList.add('active');
+    }
+
     function draw() {
         let grad = ctx.createLinearGradient(0,0,0,1920);
         grad.addColorStop(0, document.getElementById('c1').value);
         grad.addColorStop(1, document.getElementById('c2').value);
         ctx.fillStyle = grad;
         ctx.fillRect(0,0,1080,1920);
+        
+        // Patrón de fuego (Emojis nativos)
+        ctx.font = '120px sans-serif';
+        ctx.textAlign = 'center';
+        for(let x=100; x<1080; x+=160) {
+            for(let y=100; y<1920; y+=180) {
+                ctx.fillText('🔥', x, y);
+            }
+        }
     }
     
     function setPastel(c) {
         document.getElementById('c1').value = c;
         document.getElementById('c2').value = c;
         draw();
+    }
+
+    function download() {
+        let link = document.createElement('a');
+        link.download = 'mi-fondo.png';
+        link.href = canvas.toDataURL();
+        link.click();
     }
     
     draw();
